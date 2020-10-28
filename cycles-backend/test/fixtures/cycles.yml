@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  startdate: 2020-10-28
+  tracker: one
+
+two:
+  startdate: 2020-10-28
+  tracker: two

@@ -8,3 +8,7 @@
 Tracker.create(name: "Ana")
 Tracker.create(name: "Jessie")
 Tracker.create(name: "Beth")
+
+Cycle.create(startdate: "09/08/2020", tracker_id: Tracker.all.sample.id)
+Cycle.create(startdate: "08/09/2020", tracker_id: Tracker.all.sample.id)
+Cycle.create(startdate: "07/12/2020", tracker_id: Tracker.all.sample.id)
