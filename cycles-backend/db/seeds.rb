@@ -5,3 +5,6 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Tracker.create(name: "Ana")
+Tracker.create(name: "Jessie")
+Tracker.create(name: "Beth")
