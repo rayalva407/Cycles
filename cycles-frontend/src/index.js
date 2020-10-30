@@ -11,6 +11,7 @@ cycleForm.innerHTML = "<label for='new-cycle'>Enter your last period's start dat
 const trackerData = document.querySelector("#new-tracker-name")
 let cycleData = document.querySelector("#new-cycle")
 const welcomeDiv = document.querySelector("#welcome-div")
+const cycleCardDiv = document.querySelector("#cycle-card-div")
 
 function welcomeShow(object) {
   const welcomeMessage = document.createElement('h2')
@@ -19,6 +20,15 @@ function welcomeShow(object) {
   welcomeDiv.appendChild(welcomeMessage)
   welcomeDiv.appendChild(cycleForm)
   cycleData = document.querySelector("#new-cycle")
+}
+function objectCycles(object) {
+  console.log(object)
+  object.cycles.forEach(element => renderCycle(element))
+}
+function renderCycle(object) {
+  const renderDate = document.createElement('h2')
+  renderDate.innerText = object.startdate
+  cycleCardDiv.appendChild(renderDate)
 }
 
 trackerForm.addEventListener('submit', function(e) {
@@ -40,6 +50,7 @@ trackerForm.addEventListener('submit', function(e) {
     .then(function(object) {
       tracker.id = object.id
       welcomeShow(object)
+      objectCycles(object)
     })
     .catch(error => alert(error.message))
 })
@@ -62,6 +73,6 @@ cycleForm.addEventListener('submit', function(e) {
 
   fetch(CYCLES_URL, configObj)
     .then(response => response.json())
-    .then(object => console.log(object))
+    .then(object => renderCycle(object))
     .catch(error => alert(error.message))
 })

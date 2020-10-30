@@ -1,7 +1,7 @@
 class TrackersController < ApplicationController
   def index
     trackers = Tracker.all
-    render json: trackers
+    render json: trackers, :include => {:cycles => {:except => [:created_at, :updated_at]}}, except: [:created_at, :updated_at]
   end
 
   def new
@@ -11,7 +11,7 @@ class TrackersController < ApplicationController
   def create
     tracker = Tracker.find_or_create_by(tracker_params)
     if tracker.valid?
-      render json: tracker, except: [:created_at, :updated_at]
+      render json: tracker, include: [:cycles], except: [:created_at, :updated_at]
     else
       render json: {message: "Only letters"}
     end

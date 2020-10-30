@@ -1,7 +1,7 @@
 class CyclesController < ApplicationController
   def index
     cycles = Cycle.all
-    render json: cycles
+    render json: cycles, except: [:created_at, :updated_at]
   end
 
   def new
