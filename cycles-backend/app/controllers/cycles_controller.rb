@@ -11,7 +11,6 @@ class CyclesController < ApplicationController
   def create
     def create
       cycle = Cycle.new(cycle_params)
-      binding.pry
       if cycle.save
         render json: cycle, except: [:created_at, :updated_at]
       else
@@ -23,7 +22,7 @@ class CyclesController < ApplicationController
   private
 
     def cycle_params
-      params.require(:cycle).permit(:startdate)
+      params.require(:cycle).permit(:startdate, :tracker_id)
     end
 
 end

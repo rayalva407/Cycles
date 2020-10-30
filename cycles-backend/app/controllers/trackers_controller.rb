@@ -9,8 +9,8 @@ class TrackersController < ApplicationController
   end
 
   def create
-    tracker = Tracker.new(tracker_params)
-    if tracker.save
+    tracker = Tracker.find_or_create_by(tracker_params)
+    if tracker.valid?
       render json: tracker, except: [:created_at, :updated_at]
     else
       render json: {message: "Only letters"}

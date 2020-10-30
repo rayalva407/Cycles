@@ -12,23 +12,6 @@ const trackerData = document.querySelector("#new-tracker-name")
 let cycleData = document.querySelector("#new-cycle")
 const welcomeDiv = document.querySelector("#welcome-div")
 
-function fetchTrackers() {
-  fetch(TRACKERS_URL)
-    .then(response => response.json())
-    .then(object => object.forEach(element => trackers.push(element)))
-    .catch(error => alert(error.message))
-}
-
-function fetchCycles() {
-  fetch(CYCLES_URL)
-    .then(response => response.json())
-    .then(object => object.forEach(element => cycles.push(element)))
-    .catch(error => alert(error.message))
-}
-
-
-
-
 function welcomeShow(object) {
   const welcomeMessage = document.createElement('h2')
   welcomeMessage.innerText = `Welcome ${object.name}!`
@@ -39,8 +22,8 @@ function welcomeShow(object) {
 }
 
 trackerForm.addEventListener('submit', function(e) {
-  tracker = new Tracker(trackerData.value)
   e.preventDefault()
+  tracker = new Tracker(trackerData.value)
   let configObj = {
     method: "POST",
     headers: {
@@ -64,8 +47,6 @@ trackerForm.addEventListener('submit', function(e) {
 cycleForm.addEventListener('submit', function(e) {
   e.preventDefault()
   cycle = new Cycle(cycleData.value)
-  console.log(cycle.startdate, tracker.id)
-
 
   let configObj = {
     method: "POST",
