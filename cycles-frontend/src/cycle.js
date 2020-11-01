@@ -3,4 +3,5 @@ class Cycle {
     this.id
     this.startdate = startdate
   }
+
 }

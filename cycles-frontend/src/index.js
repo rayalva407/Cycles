@@ -20,7 +20,15 @@ function welcomeShow(object) {
   welcomeDiv.appendChild(welcomeMessage)
   welcomeDiv.appendChild(cycleForm)
   cycleData = document.querySelector("#new-cycle")
+}
 
+function calculateLength(date1) {
+  const oneDay = 24 * 60 * 60 * 1000;
+  const recentDate = new Date(date1);
+  const lastDate = new Date(document.querySelector("#cycle-card-div").lastElementChild.previousSibling.firstElementChild.innerText.slice(-10));
+
+  const result = Math.round(Math.abs((recentDate - lastDate) / oneDay))
+  return result
 }
 
 function dateFormat(string) {
@@ -30,9 +38,10 @@ function dateFormat(string) {
 }
 
 function renderCycle(object) {
-  const renderDate = document.createElement('h2') 
-  renderDate.innerText = `Cycle Start Date: ${dateFormat(object.startdate)}`
-  cycleCardDiv.appendChild(renderDate)
+  const renderDateDiv = document.createElement('div')
+  renderDateDiv.setAttribute("class", "cycle-card")
+  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}<p> <p>Cycle Length: ${object.length}</p> <p>Fertile Window Starts: ${object.fertile_window}</p> <p>Ovulation Starts On: ${object.ovulation}`
+  cycleCardDiv.appendChild(renderDateDiv)
 }
 
 function objectCycles(object) {
@@ -66,6 +75,7 @@ trackerForm.addEventListener('submit', function(e) {
 cycleForm.addEventListener('submit', function(e) {
   e.preventDefault()
   cycle = new Cycle(cycleData.value)
+
 
   let configObj = {
     method: "POST",
