@@ -33,8 +33,14 @@ function calculateLength(date1) {
     return result
   }
   else {
-    return null
+    return 28
   }
+}
+
+function predictNextCycle(date, days) {
+  let result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
 }
 
 function dateFormat(string) {
