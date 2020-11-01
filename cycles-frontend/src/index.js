@@ -27,7 +27,6 @@ function calculateLength(date1) {
     const oneDay = 24 * 60 * 60 * 1000;
     const recentDate = new Date(date1);
     const lastDate = new Date(document.querySelector("#cycle-card-div").lastElementChild.firstElementChild.innerText.slice(-10));
-    console.log(lastDate)
 
     const result = Math.round(Math.abs((lastDate - recentDate) / oneDay))
     return result
@@ -40,6 +39,7 @@ function calculateLength(date1) {
 function predictNextCycle(date, days) {
   let result = new Date(date);
   result.setDate(result.getDate() + days);
+  console.log(result)
   return result;
 }
 
@@ -52,7 +52,7 @@ function dateFormat(string) {
 function renderCycle(object) {
   const renderDateDiv = document.createElement('div')
   renderDateDiv.setAttribute("class", "cycle-card")
-  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}<p> <p>Cycle Length: ${object.length}</p> <p>Fertile Window Starts: ${object.fertile_window}</p> <p>Ovulation Starts On: ${object.ovulation}`
+  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}<p> <p>Cycle Length: ${object.length}</p><p>Expect Next Cycle On: ${dateFormat(object.expected_cycle)}</p><p>Fertile Window Starts: ${object.fertile_window}</p> <p>Ovulation Starts On: ${object.ovulation}`
   cycleCardDiv.appendChild(renderDateDiv)
 }
 
@@ -88,7 +88,9 @@ cycleForm.addEventListener('submit', function(e) {
   e.preventDefault()
   cycle = new Cycle(cycleData.value)
   cycle.length = calculateLength(cycle.startdate)
-  console.log(cycle.length)
+  cycle.expected_cycle = predictNextCycle(cycle.startdate, cycle.length)
+  debugger;
+
 
 
   let configObj = {
@@ -100,7 +102,8 @@ cycleForm.addEventListener('submit', function(e) {
     body: JSON.stringify({
       startdate: cycle.startdate,
       tracker_id: tracker.id,
-      length: cycle.length
+      length: cycle.length,
+      expected_cycle: cycle.expected_cycle
     })
   };
 

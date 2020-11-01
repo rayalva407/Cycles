@@ -22,7 +22,7 @@ class CyclesController < ApplicationController
   private
 
     def cycle_params
-      params.require(:cycle).permit(:startdate, :tracker_id, :length)
+      params.require(:cycle).permit(:startdate, :tracker_id, :length, :expected_cycle)
     end
 
 end
