@@ -23,12 +23,18 @@ function welcomeShow(object) {
 }
 
 function calculateLength(date1) {
-  const oneDay = 24 * 60 * 60 * 1000;
-  const recentDate = new Date(date1);
-  const lastDate = new Date(document.querySelector("#cycle-card-div").lastElementChild.previousSibling.firstElementChild.innerText.slice(-10));
+  if (document.querySelector("#cycle-card-div").getElementsByTagName("div").length >= 1) {
+    const oneDay = 24 * 60 * 60 * 1000;
+    const recentDate = new Date(date1);
+    const lastDate = new Date(document.querySelector("#cycle-card-div").lastElementChild.firstElementChild.innerText.slice(-10));
+    console.log(lastDate)
 
-  const result = Math.round(Math.abs((recentDate - lastDate) / oneDay))
-  return result
+    const result = Math.round(Math.abs((lastDate - recentDate) / oneDay))
+    return result
+  }
+  else {
+    return null
+  }
 }
 
 function dateFormat(string) {
@@ -75,6 +81,8 @@ trackerForm.addEventListener('submit', function(e) {
 cycleForm.addEventListener('submit', function(e) {
   e.preventDefault()
   cycle = new Cycle(cycleData.value)
+  cycle.length = calculateLength(cycle.startdate)
+  console.log(cycle.length)
 
 
   let configObj = {
@@ -85,7 +93,8 @@ cycleForm.addEventListener('submit', function(e) {
     },
     body: JSON.stringify({
       startdate: cycle.startdate,
-      tracker_id: tracker.id
+      tracker_id: tracker.id,
+      length: cycle.length
     })
   };
 
