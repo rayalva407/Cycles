@@ -1,5 +1,18 @@
 #welcome-div {
   text-align: center;
-  background: #D0E4F5 none no-repeat scroll 3px 8px;
-  border: 5px outset rgba(28,110,164,0.65);
+  background: #438A74 none no-repeat scroll 3px 8px;
+  border: 2px outset #21453A;
+}
+
+h2 {
+  background-color: #75BDA6;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-position: 0 0;
+  border: 2px outset #438A74;
+}
+
+body {
+  background-color: #E0F0EB;
 }

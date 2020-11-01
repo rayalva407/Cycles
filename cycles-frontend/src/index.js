@@ -3,8 +3,8 @@ const TRACKERS_URL = `${BACKEND_URL}/trackers`
 const CYCLES_URL = `${BACKEND_URL}/cycles`
 const trackerForm = document.querySelector("#create-tracker-form")
 const cycleForm = document.createElement('form')
-let tracker
-let cycle
+let tracker;
+let cycle;
 cycleForm.setAttribute("id", "cycle-startdate-form")
 cycleForm.innerHTML = "<label for='new-cycle'>Enter your last period's start date:</label><input type='date' id='new-cycle' name='new-cycle'><input type='submit' value='Submit'>"
 
@@ -14,21 +14,29 @@ const welcomeDiv = document.querySelector("#welcome-div")
 const cycleCardDiv = document.querySelector("#cycle-card-div")
 
 function welcomeShow(object) {
-  const welcomeMessage = document.createElement('h2')
+  const welcomeMessage = document.createElement('h1')
   welcomeMessage.innerText = `Welcome ${object.name}!`
   trackerForm.remove()
   welcomeDiv.appendChild(welcomeMessage)
   welcomeDiv.appendChild(cycleForm)
   cycleData = document.querySelector("#new-cycle")
+
 }
-function objectCycles(object) {
-  console.log(object)
-  object.cycles.forEach(element => renderCycle(element))
+
+function dateFormat(string) {
+  let split = string.split("-")
+  date = `${split[1]}-${split[2]}-${split[0]}`
+  return date
 }
+
 function renderCycle(object) {
-  const renderDate = document.createElement('h2')
-  renderDate.innerText = object.startdate
+  const renderDate = document.createElement('h2') 
+  renderDate.innerText = `Cycle Start Date: ${dateFormat(object.startdate)}`
   cycleCardDiv.appendChild(renderDate)
+}
+
+function objectCycles(object) {
+  object.cycles.forEach(element => renderCycle(element))
 }
 
 trackerForm.addEventListener('submit', function(e) {
