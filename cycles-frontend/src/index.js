@@ -29,7 +29,6 @@ function dateFormat(string) {
 }
 
 function daysDifference(date1, date2) {
-  debugger;
   const oneDay = 24 * 60 * 60 * 1000;
   const firstDate = new Date(date1);
   const secondDate = new Date(date2);
@@ -39,16 +38,14 @@ function daysDifference(date1, date2) {
 }
 
 function getAverageLength(object) {
+
   let cardDiv = document.querySelector('#cycle-card-div')
-  debugger;
   if (cardDiv.childElementCount === 0) {
-    debugger;
     return 28;
   }
   else {
-    debugger;
     let total = 0;
-
+    debugger;
     const children = cardDiv.children;
     const firstDate = cardDiv.lastElementChild.firstElementChild.innerText.slice(-10)
     const secondDate = dateFormat(object.startdate)
@@ -56,7 +53,7 @@ function getAverageLength(object) {
 
     for (let i = 0; i < children.length; i++) {
       const cycleCard = children[i];
-      const num = cycleCard.innerText.slice(-2)
+      const num = cycleCard.firstElementChild.nextElementSibling.innerText.slice(-2)
       total += parseInt(num)
     }
     return Math.round((total + diff) / (children.length + 1))
@@ -64,9 +61,10 @@ function getAverageLength(object) {
 
 }
 
-function expectedCycleDate(date, days) {
+function dateAddition(date, days) {
   let result = new Date(date);
-  if (tracker.cycles === undefined) {
+  debugger;
+  if (!cycleCardDiv.hasChildNodes()) {
     days = 28
     result.setDate(result.getDate() + days);
     return result;
@@ -81,7 +79,7 @@ function expectedCycleDate(date, days) {
 function renderCycle(object) {
   const renderDateDiv = document.createElement('div')
   renderDateDiv.setAttribute("class", "cycle-card")
-  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}</p> <p>Cycle Length: ${object.length}</p>`
+  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}</p> <p>Cycle Length: ${object.length}</p> <p>Next Cycle: ${dateFormat(object.expected_cycle)}</p> <p>Ovulation Starts On: ${dateFormat(object.ovulation)}</p>`
   cycleCardDiv.appendChild(renderDateDiv)
 }
 
@@ -118,7 +116,8 @@ cycleForm.addEventListener('submit', function(e) {
   debugger;
   cycle = new Cycle(cycleData.value)
   cycle.length = getAverageLength(cycle)
-  // cycle.expected_cycle = expectedCycleDate(cycle.startdate, cycle.length)
+  cycle.expected_cycle = dateAddition(cycle.startdate, cycle.length)
+  cycle.ovulation = dateAddition(cycle.startdate, 14)
 
   let configObj = {
     method: "POST",
@@ -130,7 +129,8 @@ cycleForm.addEventListener('submit', function(e) {
       startdate: cycle.startdate,
       tracker_id: tracker.id,
       length: cycle.length,
-      expected_cycle: cycle.expected_cycle
+      expected_cycle: cycle.expected_cycle,
+      ovulation: cycle.ovulation
     })
   };
 
