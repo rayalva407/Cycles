@@ -79,7 +79,7 @@ function dateAddition(date, days) {
 function renderCycle(object) {
   const renderDateDiv = document.createElement('div')
   renderDateDiv.setAttribute("class", "cycle-card")
-  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}</p> <p>Cycle Length: ${object.length}</p> <p>Next Cycle: ${dateFormat(object.expected_cycle)}</p> <p>Ovulation Starts On: ${dateFormat(object.ovulation)}</p>`
+  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}</p> <p>Cycle Length: ${object.length}</p> <p>Next Cycle: ${dateFormat(object.expected_cycle)}</p> <p>Ovulation Starts On: ${dateFormat(object.ovulation)}</p> <p>Your Fertile Window Starts On: ${dateFormat(object.fertile_window)}</p>`
   cycleCardDiv.appendChild(renderDateDiv)
 }
 
@@ -118,6 +118,7 @@ cycleForm.addEventListener('submit', function(e) {
   cycle.length = getAverageLength(cycle)
   cycle.expected_cycle = dateAddition(cycle.startdate, cycle.length)
   cycle.ovulation = dateAddition(cycle.startdate, 14)
+  cycle.fertile_window = dateAddition(cycle.startdate, 10)
 
   let configObj = {
     method: "POST",
@@ -130,7 +131,8 @@ cycleForm.addEventListener('submit', function(e) {
       tracker_id: tracker.id,
       length: cycle.length,
       expected_cycle: cycle.expected_cycle,
-      ovulation: cycle.ovulation
+      ovulation: cycle.ovulation,
+      fertile_window: cycle.fertile_window
     })
   };
 
