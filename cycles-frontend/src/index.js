@@ -22,37 +22,66 @@ function welcomeShow(object) {
   cycleData = document.querySelector("#new-cycle")
 }
 
-function calculateLength(date1) {
-  if (document.querySelector("#cycle-card-div").getElementsByTagName("div").length >= 1) {
-    const oneDay = 24 * 60 * 60 * 1000;
-    const recentDate = new Date(date1);
-    const lastDate = new Date(document.querySelector("#cycle-card-div").lastElementChild.firstElementChild.innerText.slice(-10));
-
-    const result = Math.round(Math.abs((lastDate - recentDate) / oneDay))
-    return result
-  }
-  else {
-    return 28
-  }
-}
-
-function predictNextCycle(date, days) {
-  let result = new Date(date);
-  result.setDate(result.getDate() + days);
-  console.log(result)
-  return result;
-}
-
 function dateFormat(string) {
   let split = string.split("-")
   date = `${split[1]}-${split[2]}-${split[0]}`
   return date
 }
 
+function daysDifference(date1, date2) {
+  debugger;
+  const oneDay = 24 * 60 * 60 * 1000;
+  const firstDate = new Date(date1);
+  const secondDate = new Date(date2);
+  const difference = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+
+  return difference;
+}
+
+function getAverageLength(object) {
+  let cardDiv = document.querySelector('#cycle-card-div')
+  debugger;
+  if (cardDiv.childElementCount === 0) {
+    debugger;
+    return 28;
+  }
+  else {
+    debugger;
+    let total = 0;
+
+    const children = cardDiv.children;
+    const firstDate = cardDiv.lastElementChild.firstElementChild.innerText.slice(-10)
+    const secondDate = dateFormat(object.startdate)
+    const diff = daysDifference(firstDate, secondDate)
+
+    for (let i = 0; i < children.length; i++) {
+      const cycleCard = children[i];
+      const num = cycleCard.innerText.slice(-2)
+      total += parseInt(num)
+    }
+    return Math.round((total + diff) / (children.length + 1))
+  }
+
+}
+
+function expectedCycleDate(date, days) {
+  let result = new Date(date);
+  if (tracker.cycles === undefined) {
+    days = 28
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+  else {
+    result.setDate(result.getDate() + days);
+    return result;
+
+  }
+}
+
 function renderCycle(object) {
   const renderDateDiv = document.createElement('div')
   renderDateDiv.setAttribute("class", "cycle-card")
-  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}<p> <p>Cycle Length: ${object.length}</p><p>Expect Next Cycle On: ${dateFormat(object.expected_cycle)}</p><p>Fertile Window Starts: ${object.fertile_window}</p> <p>Ovulation Starts On: ${object.ovulation}`
+  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}</p> <p>Cycle Length: ${object.length}</p>`
   cycleCardDiv.appendChild(renderDateDiv)
 }
 
@@ -86,12 +115,10 @@ trackerForm.addEventListener('submit', function(e) {
 
 cycleForm.addEventListener('submit', function(e) {
   e.preventDefault()
-  cycle = new Cycle(cycleData.value)
-  cycle.length = calculateLength(cycle.startdate)
-  cycle.expected_cycle = predictNextCycle(cycle.startdate, cycle.length)
   debugger;
-
-
+  cycle = new Cycle(cycleData.value)
+  cycle.length = getAverageLength(cycle)
+  // cycle.expected_cycle = expectedCycleDate(cycle.startdate, cycle.length)
 
   let configObj = {
     method: "POST",
