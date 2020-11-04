@@ -9,14 +9,18 @@ class CyclesController < ApplicationController
   end
 
   def create
-    def create
-      cycle = Cycle.new(cycle_params)
-      if cycle.save
-        render json: cycle, except: [:created_at, :updated_at]
-      else
-        render json: {message: "Error"}
-      end
+    cycle = Cycle.new(cycle_params)
+    if cycle.save
+      render json: cycle, except: [:created_at, :updated_at]
+    else
+      render json: {message: "Error"}
     end
+  end
+
+  def destroy
+    cycle = Cycle.find(params[:id])
+    binding.pry
+    cycle.destroy
   end
 
   private
