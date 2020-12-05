@@ -13,22 +13,19 @@ let cycleData = document.querySelector("#new-cycle")
 const welcomeDiv = document.querySelector("#welcome-div")
 const cycleCardDiv = document.querySelector("#cycle-card-div")
 
-function welcomeShow(object) {
-  const welcomeMessage = document.createElement('h1')
-  welcomeMessage.innerText = `Welcome ${object.name}!`
-  trackerForm.remove()
-  welcomeDiv.appendChild(welcomeMessage)
-  welcomeDiv.appendChild(cycleForm)
-  cycleData = document.querySelector("#new-cycle")
-}
+// function dateFormat(string) {
+//   let split = string.split("-")
+//   date = `${split[1]}-${split[2]}-${split[0]}`
+//   return date
+// }
 
-function dateFormat(string) {
+const dateFormat = string => {
   let split = string.split("-")
   date = `${split[1]}-${split[2]}-${split[0]}`
   return date
 }
 
-function daysDifference(date1, date2) {
+const daysDifference = (date1, date2) => {
   const oneDay = 24 * 60 * 60 * 1000;
   const firstDate = new Date(date1);
   const secondDate = new Date(date2);
@@ -37,53 +34,14 @@ function daysDifference(date1, date2) {
   return difference;
 }
 
-function getAverageLength(object) {
-
-  let cardDiv = document.querySelector('#cycle-card-div')
-  if (cardDiv.childElementCount === 0) {
-    return 28;
-  }
-  else {
-    let total = 0;
-    debugger;
-    const children = cardDiv.children;
-    const firstDate = cardDiv.lastElementChild.firstElementChild.innerText.slice(-10)
-    const secondDate = dateFormat(object.startdate)
-    const diff = daysDifference(firstDate, secondDate)
-
-    for (let i = 0; i < children.length; i++) {
-      const cycleCard = children[i];
-      const num = cycleCard.firstElementChild.nextElementSibling.innerText.slice(-2)
-      total += parseInt(num)
-    }
-    return Math.round((total + diff) / (children.length + 1))
-  }
-
-}
-
-function dateAddition(date, days) {
-  let result = new Date(date);
-  debugger;
-  if (!cycleCardDiv.hasChildNodes()) {
-    days = 28
-    result.setDate(result.getDate() + days);
-    return result;
-  }
-  else {
-    result.setDate(result.getDate() + days);
-    return result;
-
-  }
-}
-
-function renderCycle(object) {
+const renderCycle = object => {
   const renderDateDiv = document.createElement('div')
   renderDateDiv.setAttribute("class", "cycle-card")
-  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}</p> <p>Cycle Length: ${object.length}</p> <p>Next Cycle: ${dateFormat(object.expected_cycle)}</p> <p>Ovulation Starts On: ${dateFormat(object.ovulation)}</p> <p>Your Fertile Window Starts On: ${dateFormat(object.fertile_window)}</p>`
+  renderDateDiv.innerHTML = `<p>Cycle Start Date: ${dateFormat(object.startdate)}</p> <p>Cycle Length: ${object.length}</p> <p>Next Cycle Start Date: ${dateFormat(object.expected_cycle)}</p> <p>Ovulation Starts On: ${dateFormat(object.ovulation)}</p> <p>Your Fertile Window Starts On: ${dateFormat(object.fertile_window)}</p> <button data-id="${object.id}" class="delete-btn">DELETE</button>`
   cycleCardDiv.appendChild(renderDateDiv)
 }
 
-function objectCycles(object) {
+const objectCycles = object => {
   object.cycles.forEach(element => renderCycle(element))
 }
 
@@ -105,7 +63,7 @@ trackerForm.addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(function(object) {
       tracker.id = object.id
-      welcomeShow(object)
+      tracker.render()
       objectCycles(object)
     })
     .catch(error => alert(error.message))
@@ -113,12 +71,7 @@ trackerForm.addEventListener('submit', function(e) {
 
 cycleForm.addEventListener('submit', function(e) {
   e.preventDefault()
-  debugger;
   cycle = new Cycle(cycleData.value)
-  cycle.length = getAverageLength(cycle)
-  cycle.expected_cycle = dateAddition(cycle.startdate, cycle.length)
-  cycle.ovulation = dateAddition(cycle.startdate, 14)
-  cycle.fertile_window = dateAddition(cycle.startdate, 10)
 
   let configObj = {
     method: "POST",
@@ -140,4 +93,15 @@ cycleForm.addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(object => renderCycle(object))
     .catch(error => alert(error.message))
+})
+
+cycleCardDiv.addEventListener("click", (e) => {
+  if (e.target.className === "delete-btn") {
+    fetch(`${CYCLES_URL}/${e.target.dataset.id}`, {
+      method: "DELETE"
+    })
+    .then(r => {
+      e.target.parentElement.remove()
+    })
+  }
 })

@@ -19,7 +19,6 @@ class CyclesController < ApplicationController
 
   def destroy
     cycle = Cycle.find(params[:id])
-    binding.pry
     cycle.destroy
   end
 

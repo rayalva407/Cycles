@@ -16,3 +16,8 @@
 body {
   background-color: #E0F0EB;
 }
+
+.delete-btn {
+  background-color: rgb(253, 84, 84);
+  border: none;
+}
